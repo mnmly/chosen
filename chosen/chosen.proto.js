@@ -178,7 +178,7 @@ Copyright (c) 2011 by Harvest
     };
 
     AbstractChosen.prototype.result_add_option = function(option) {
-      var classes, dataset, key, style, value, _ref;
+      var classes, dataset, key, style, value;
       if (!option.disabled) {
         option.dom_id = this.container_id + "_o_" + option.array_index;
         classes = option.selected && this.is_multiple ? [] : ["active-result"];
@@ -192,11 +192,16 @@ Copyright (c) 2011 by Harvest
           classes.push(option.classes);
         }
         style = option.style.cssText !== "" ? " style=\"" + option.style + "\"" : "";
-        _ref = option.dataset;
-        for (key in _ref) {
-          value = _ref[key];
-          dataset = "data-" + key + "='" + value + "'";
-        }
+        dataset = (function() {
+          var _ref, _results;
+          _ref = option.dataset;
+          _results = [];
+          for (key in _ref) {
+            value = _ref[key];
+            _results.push("data-" + key + "='" + value + "'");
+          }
+          return _results;
+        })();
         return '<li id="' + option.dom_id + '" class="' + classes.join(' ') + '"' + style + ' ' + dataset.join(' ') + '>' + option.html + '</li>';
       } else {
         return "";

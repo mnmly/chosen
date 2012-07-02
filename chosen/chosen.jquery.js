@@ -178,7 +178,7 @@ Copyright (c) 2011 by Harvest
     };
 
     AbstractChosen.prototype.result_add_option = function(option) {
-      var classes, dataset, key, style, value, _ref;
+      var classes, dataset, key, style, value;
       if (!option.disabled) {
         option.dom_id = this.container_id + "_o_" + option.array_index;
         classes = option.selected && this.is_multiple ? [] : ["active-result"];
@@ -192,11 +192,16 @@ Copyright (c) 2011 by Harvest
           classes.push(option.classes);
         }
         style = option.style.cssText !== "" ? " style=\"" + option.style + "\"" : "";
-        _ref = option.dataset;
-        for (key in _ref) {
-          value = _ref[key];
-          dataset = "data-" + key + "='" + value + "'";
-        }
+        dataset = (function() {
+          var _ref, _results;
+          _ref = option.dataset;
+          _results = [];
+          for (key in _ref) {
+            value = _ref[key];
+            _results.push("data-" + key + "='" + value + "'");
+          }
+          return _results;
+        })();
         return '<li id="' + option.dom_id + '" class="' + classes.join(' ') + '"' + style + ' ' + dataset.join(' ') + '>' + option.html + '</li>';
       } else {
         return "";
@@ -690,7 +695,7 @@ Copyright (c) 2011 by Harvest
     };
 
     Chosen.prototype.choice_build = function(item) {
-      var choice_id, link,
+      var choice_id, dataset, key, link, value,
         _this = this;
       if (this.is_multiple && this.max_selected_options <= this.choices) {
         this.form_field_jq.trigger("liszt:maxselected", {
@@ -700,7 +705,17 @@ Copyright (c) 2011 by Harvest
       }
       choice_id = this.container_id + "_c_" + item.array_index;
       this.choices += 1;
-      this.search_container.before('<li class="search-choice" id="' + choice_id + '"><span>' + item.html + '</span><a href="javascript:void(0)" class="search-choice-close" rel="' + item.array_index + '"></a></li>');
+      dataset = (function() {
+        var _ref, _results;
+        _ref = item.dataset;
+        _results = [];
+        for (key in _ref) {
+          value = _ref[key];
+          _results.push("data-" + key + "='" + value + "'");
+        }
+        return _results;
+      })();
+      this.search_container.before('<li class="search-choice" id="' + choice_id + '" ' + dataset.join(' ') + '><span>' + item.html + '</span><a href="javascript:void(0)" class="search-choice-close" rel="' + item.array_index + '"></a></li>');
       link = $('#' + choice_id).find("a").first();
       return link.click(function(evt) {
         return _this.choice_destroy_link_click(evt);
