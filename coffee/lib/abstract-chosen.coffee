@@ -65,8 +65,8 @@ class AbstractChosen
       classes.push option.classes if option.classes != ""
 
       style = if option.style.cssText != "" then " style=\"#{option.style}\"" else ""
-
-      '<li id="' + option.dom_id + '" class="' + classes.join(' ') + '"'+style+'>' + option.html + '</li>'
+      dataset = "data-#{key}='#{value}'" for key, value of option.dataset
+      '<li id="' + option.dom_id + '" class="' + classes.join(' ') + '"'+style+ ' ' + dataset.join(' ') + '>' + option.html + '</li>'
     else
       ""
 
